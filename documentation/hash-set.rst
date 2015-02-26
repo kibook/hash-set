@@ -19,29 +19,6 @@ The hash-set module
    :class:`<set>`. Primarily, it allows for custom hashing functions and
    key-tests for different object classes.
 
-.. generic-function:: set-element-hash
-   :open:
-
-   :signature: set-element-hash *object* *initial-state* => 
-        *id* *result-state*
-
-   :param object:               Object to compute the hash of.
-   :param initial-state:        Initial hash-state.
-   :param id:                   Hash ID computed from *object*.
-   :param result-state:         The resulting hash-state.
-
-   This method is used to compute the hash-code of *object*. By default
-   it simply calls :meth:`common-dylan:common-dylan:object-hash(<object>)`.
-
-   By specializing this method and
-   :meth:`common-dylan:common-dylan:\=(<object>, <object>)` for a subclass
-   of :class:`<object>`, it can be given a custom hash function when used
-   in a :class:`<hash-set>`.
-
-   A good hash function will return the same ID for two objects
-   **object1** and **object2** whenever **object1 = object2**, and will
-   minimize collisions between hash IDs when **object1 ~= object2**.
-
    Example:
 
 .. code-block:: dylan
@@ -67,11 +44,11 @@ The hash-set module
    // on its ID. In this case, we can just use the person's ID directly
    // as the hash ID, but in other cases another built-in hash function
    // might be more useful.
-   define method set-element-hash
+   define method custom-hash
        (person :: <person>, initial-state :: <hash-state>)
     => (id :: <integer>, result-state :: <hash-state>)
      values(person.id, initial-state)
-   end method set-element-hash;
+   end method custom-hash;
 
    // Create some people
    let john-smith = make(<person>, id: 1);

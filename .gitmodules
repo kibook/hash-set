@@ -1,0 +1,3 @@
+[submodule "custom-hash"]
+	path = custom-hash
+	url = https://github.com/kibook/custom-hash.git

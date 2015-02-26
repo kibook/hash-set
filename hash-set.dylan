@@ -1,36 +1,12 @@
 module: hash-set
 author: kibook
 synopsis: A set that allows different subclasses of objects to be
-          compared and hashed differently.
-version: 18-02-2015
-
-// <hash-set> is built on the hash table (<table>) that is part of the
-// standard Dylan collections.
-define sealed class <hash-set-table> (<table>) end;
+          compared and hashed differently using \= and custom-hash.
+version: 25-02-2015
 
 define open class <hash-set> (<set>)
-  constant slot set-elements :: <hash-set-table> = make(<hash-set-table>);
+  constant slot set-elements :: <table> = make(<custom-hash-table>);
 end class <hash-set>;
-
-// Compute the hash of a set element.
-define open generic set-element-hash
-    (object, initial-state :: <hash-state>)
- => (id :: <integer>, result-state :: <hash-state>);
-
-// Default set-element-hash uses object-hash
-define method set-element-hash
-    (object, initial-state :: <hash-state>)
- => (id :: <integer>, result-state :: <hash-state>)
-  object-hash(object, initial-state)
-end method set-element-hash;
-
-// Define a table-protocol for <hash-set-table> which uses \= to test keys
-// and a custom hash function
-define method table-protocol
-    (hash-set-table :: <hash-set-table>)
- => (test :: <function>, hash :: <function>)
-  values(\=, set-element-hash)
-end method table-protocol;
 
 define method member?
     (key, set :: <hash-set>, #key test)
